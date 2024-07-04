@@ -23,7 +23,7 @@ app.listen(3000, ()=>{
   console.log("Server is running on 3000");
 })
 
-app.use('api/user', userRoutes);
+app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use((err, req, res, next)=>{
