@@ -25,6 +25,30 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
     getUser();
   }, [comment]);
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedContent(comment.content);
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`/api/comment/editComment/${comment._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: editedContent,
+        }),
+      });
+      if (res.ok) {
+        setIsEditing(false);
+        onEdit(comment, editedContent);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
@@ -56,7 +80,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                 type='button'
                 size='sm'
                 gradientDuoTone='purpleToBlue'
-                //onClick={handleSave}
+                onClick={handleSave}
               >
                 Save
               </Button>
@@ -97,7 +121,7 @@ export default function Comment({ comment, onLike, onEdit, onDelete }) {
                   <>
                     <button
                       type='button'
-                      //onClick={handleEdit}
+                      onClick={handleEdit}
                       className='text-gray-400 hover:text-blue-500'
                     >
                       Edit
